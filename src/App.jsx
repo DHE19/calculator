@@ -69,63 +69,85 @@ const verticalActions =[
 ]
 
 let decimal = false;
+
 const initialValue = '0';
 //hay un operador antes de mi
  let operador = false;
 
  let negative = false;
+
+   //toma fotografías cada cierto tiempo
+  let photographia = '';
+  //guarda el ultimo signo
+  let operatorPhoto = '';
 function App() {
-  // registra cada numero y operador
-  const [operations, setOperations] = useState([]);
+
   //muestra la operación completa basandose en operations
   const [text, setText] = useState(initialValue);
-  //solo de prueba
-  const [pib, setpib] = useState(0);
+
+
+  const operations = ['+','*','-','/']
+
+  const backup = (signo) =>{
+      const op = operations.find(ope => ope === signo);
+      if(op)
+        photographia = text;
+
+      console.log(photographia);
+      
+  }
   const handleClick = (signo) =>{
+
+    
+
     switch(signo){
       case 'AC':
         //limpia el array y el texto
-        setOperations([]);
         setText(initialValue);
         decimal = false;
+        negative = false;
+        operador = false;
+        photographia = '';
         break;
       case '=':
-        if(isNaN(operations[operations.length - 1])) console.log('no se debe de ejecutar la operación');
         //ejecuta la evalucion, pero primero hace un join de todo el texto
-        //setText(evaluate(operations.join(' ')));
-        setpib(i => i +1);
+        setText(evaluate(text));
         break;
       case '.':
         if(!decimal)setText(i => `${i}${signo}`);
         decimal = true;
         break;
       default:
+        if(isNaN(signo)){
+
+        
         if(isNaN(signo) && !operador){ 
           //añadir el operador en el array
           setText(i => i === initialValue ? i : `${i} ${signo} `)
           decimal = false;
+          operatorPhoto = signo;
           operador = true;
-          negative = false;
+          backup(signo);
+          //negative = false;
         }
-        else if( signo === '-' && !negative){
-          setText(i => i === initialValue ? i : `${i} ${signo}`);
+          //true            *        !== -         -    
+        if(operador && operatorPhoto !== '-' && signo === '-' && !negative){
+          setText(i => i === initialValue ? i : `${i} ${signo} `);
           negative = true;
         }
-        else if( isNaN(signo) && operador && negative){
-          //elimnar los signos anteriores
-          const updateOperations = operations.concat();
-          const lenght = updateOperations.lastIndexOf
-          console.log(updateOperations.slice)
+        
+        else if(operador && operatorPhoto !== '-' && signo !== operatorPhoto){
+          photographia=`${photographia} ${signo} `
+          console.log('backip',photographia)
+          setText(photographia);
         }
-        else if(!isNaN(signo)) {
+      }
+        else {
           setText(i => i === initialValue ? signo : `${i}${signo}` );
           operador = false;
         }
     }
   }
-  React.useEffect(() =>{
-    console.log('resultado:',text);
-  },[pib])
 
     return (
     <div className="App">
@@ -154,28 +176,3 @@ function App() {
 
 export default App;
 
-
-  const example = ['36','*','-','41'];
-  const anidado = '';
-  const exampleTwo = ['36','*','-','+','41'];
- function makerOperations() {
-  const resultado = example.reduce((prev,current,currentIndex) =>{
-      const futureIndex = currentIndex + 1;
-
-      //analizar si el siguiente no es un numero
-      //analizar si el actual es un numero
-      //anazaliar si el previo no es un numero y tu también no eres un numero
-
-  },'');
-
-
-
-
-  console.log(resultado);
-}
-
-const  CheckerValues = () =>
-
-function checkerValues (){
-
-}
